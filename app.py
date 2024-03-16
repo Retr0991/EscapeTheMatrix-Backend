@@ -12,6 +12,11 @@ class Counter(db.Model):
     team_name = db.Column(db.String(50), unique=True)
     count = db.Column(db.Integer, default=0)
 
+# Create the database tables
+with app.app_context():
+    db.create_all()
+
+
 @app.route('/', methods=['GET'])
 def home():
     return render_template('index.html')
