@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = postgres://database_etm_user:XJ1jVtHuSqGlUzKxAzB58kbBgcqdBR9l@dpg-cnr2n60l5elc73b0b5hg-a/database_etm
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://database_etm_user:XJ1jVtHuSqGlUzKxAzB58kbBgcqdBR9l@dpg-cnr2n60l5elc73b0b5hg-a/database_etm'
 db = SQLAlchemy(app)
 
 class Counter(db.Model):
