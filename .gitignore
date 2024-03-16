@@ -1,1 +1,3 @@
 instance/counter.db
+__pycache__/app.cpython-312.pyc
+.env
