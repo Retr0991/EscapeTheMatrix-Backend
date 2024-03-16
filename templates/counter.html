@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Counter</title>
+</head>
+<body>  
+    <h1>Counter</h1>
+    <table border="1">
+        <tr>
+            <th>Team Name</th>
+            <th>Leader ID</th>
+            <th>Rank</th>
+        </tr>
+        {% for entry in entries %}
+        <tr>
+            <td>{{ entry.count }}</td>
+            <td>{{ entry.team_name }}</td>
+            <td>{{ entry.leader_id }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
