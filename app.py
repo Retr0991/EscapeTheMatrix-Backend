@@ -17,20 +17,28 @@ class Counter(db.Model):
 with app.app_context():
     db.create_all()
 
+@app.route('/delete_all_data', methods=['DELETE'])
+def delete_all_data():
+    try:
+        # Delete all records from the Counter table
+        db.session.query(Counter).delete()
+        db.session.commit()
+        return jsonify({"message": "All data deleted successfully."}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+    finally:
+        db.session.close()
+
 
 @app.route('/', methods=['GET'])
 def home():
     return render_template('index.html')
 
-@app.route('/get_details', methods=['POST'])
-def get_details():
-    team_name = request.files["teamName"]
-    leader_id = request.files["leaderID"]
-    return team_name, leader_id
 
 @app.route('/create_new', methods=['POST'])
 def create_new():
-    ip_address = request.remote_addr
+    ip_address = request.form["ipAddress"]
     team_name = request.form["teamName"]
     leader_id = request.form["leaderID"]
     ip_entry = Counter.query.filter_by(ip_address=ip_address).first()
