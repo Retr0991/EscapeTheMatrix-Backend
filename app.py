@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import random, os
+from flask import Flask, request, make_response
 # from dotenv import load_dotenv
 
 # load_dotenv()
@@ -22,6 +23,12 @@ class Counter(db.Model):
 # Create the database tables
 with app.app_context():
     db.create_all()
+
+
+@app.route('/get_cookie', methods=['GET'])
+def get_cookie():
+    username = request.cookies.get('unique_id')
+    return f"UID: {username}"
 
 @app.route('/delete_all_data', methods=['GET'])
 def delete_all_data():
@@ -47,6 +54,8 @@ def create_new():
     team_name = request.form["teamName"]
     leader_id = request.form["leaderID"]
     unique_id = "ieee_"+str(random.randint(0, 999))
+    response = make_response("Cookie set!")
+    response.set_cookie('unique_id', unique_id)
     entry = Counter.query.filter_by(unique_id=unique_id).first()
     if entry is None:
         new_entry = Counter(leader_id=leader_id, team_name=team_name, unique_id=unique_id, count = 0)
