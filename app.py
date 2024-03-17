@@ -1,17 +1,23 @@
 from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
+import random, os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+db_pass = os.getenv("RENDER_POSTGRESQL")
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://database_etm_8dms_user:z0jbTb9cQ6CDFkJDYTVivaZz5J5AhOcy@dpg-cnr2vt21hbls73dtptcg-a/database_etm_8dms'
+app.config['SQLALCHEMY_DATABASE_URI'] = db_pass
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Counter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    leader_id = db.Column(db.String(50))
-    ip_address = db.Column(db.String(50), unique=True)
     team_name = db.Column(db.String(50), unique=True)
     count = db.Column(db.Integer, default=0)
+    unique_id = db.Column(db.String(50), unique=True)
+    leader_id = db.Column(db.String(50), unique=True)
 
 # Create the database tables
 with app.app_context():
@@ -38,49 +44,39 @@ def home():
 
 @app.route('/create_new', methods=['POST'])
 def create_new():
-    ip_address = request.form["ipAddress"]
     team_name = request.form["teamName"]
     leader_id = request.form["leaderID"]
-    ip_entry = Counter.query.filter_by(ip_address=ip_address).first()
-    if ip_entry is None:
-        new_entry = Counter(leader_id=leader_id, team_name=team_name, ip_address=ip_address, count = 0)
+    unique_id = "ieee_"+str(random.randint(0, 999))
+    entry = Counter.query.filter_by(unique_id=unique_id).first()
+    if entry is None:
+        new_entry = Counter(leader_id=leader_id, team_name=team_name, unique_id=unique_id, count = 0)
         db.session.add(new_entry)
         db.session.commit()
-        return jsonify({"Success":"Created"})
+        return jsonify({"Success. Your ID is":unique_id})
     else:
         return jsonify({"Already":"Exists"})
 
-@app.route('/increment_counter', methods=['GET'])
+@app.route('/increment', methods=['GET'])
+def increment():
+    return render_template("increment.html")
+
+@app.route('/increment_counter', methods=['POST'])
 def increment_counter():
     try:
-        # Get the IP address of the requester
-        ip_address = request.remote_addr
-        # Check if IP address exists in the database
-        ip_entry = Counter.query.filter_by(ip_address=ip_address).first()
-        if ip_entry:
-            ip_entry.count += 1
+        # Get the UID of the requester
+        unique_id = request.form["unique_id"]
+        # Check if unique_id exists in the database
+        entry = Counter.query.filter_by(unique_id=unique_id).first()
+        if entry:
+            entry.count += 1
         
         db.session.commit()
         Counter.query.order_by(Counter.count.desc()).all()
         
-        return 'Counter incremented for IP: {}'.format(ip_address)
+        return 'Counter incremented for UID: {}'.format(unique_id)
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
-
-@app.route('/get_counter', methods=['GET'])
-def get_counter():
-    # Get the IP address of the requester
-    ip_address = request.remote_addr
-    
-    # Get the counter value for this IP address
-    ip_entry = Counter.query.filter_by(ip_address=ip_address).first()
-    if ip_entry:
-        count = ip_entry.count
-    else:
-        count = 0
-    
-    return 'Counter value for IP {}: {}'.format(ip_address, count)
 
 @app.route('/view_counter', methods=['GET'])
 def view_counter():
