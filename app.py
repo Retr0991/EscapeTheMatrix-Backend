@@ -52,7 +52,7 @@ def create_new():
     existing_entry = Counter.query.filter_by(team_name=team_name).first()
     if existing_entry:
         return render_template("index.html", alr="Team already Exists")
-    unique_id = "ieee_"+str(random.randint(0, 999))
+    unique_id = "ieee_"+str(random.randint(0, 999999))
     entry = Counter.query.filter_by(unique_id=unique_id).first()
     if entry is None:
         new_entry = Counter(leader_id=leader_id, team_name=team_name, unique_id=unique_id, count = 0, lives = 3)
