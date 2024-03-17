@@ -10,9 +10,10 @@
     <table border="1">
       <tr>
         <th>ID</th>
-        <th>Rank</th>
+        <th>Points</th>
         <th>Team Name</th>
         <th>Leader ID</th>
+        <th>Lives</th>
       </tr>
       {% for entry in entries %}
       <tr>
@@ -20,6 +21,7 @@
         <td>{{ entry.count }}</td>
         <td>{{ entry.team_name }}</td>
         <td>{{ entry.leader_id }}</td>
+        <td>{{ entry.lives }}</td>
       </tr>
       {% endfor %}
     </table>

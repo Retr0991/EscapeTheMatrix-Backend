@@ -7,6 +7,11 @@
     <title>Team Information</title>
 </head>
 <body>
+    {% if alr %}
+    <script>
+        alert("{{ alr }}");
+    </script>
+    {% endif %}
     <h2>Team Information Form</h2>
     <form action="/create_new" method="POST">
         <label for="teamName">Team Name:</label><br>
