@@ -1,11 +1,11 @@
 from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import random, os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
 
-db_pass = os.getenv("RENDER_POSTGRESQL")
+db_pass = 'postgresql://database_etm_39kh_user:vfykAghBGlAtv2hgAuchLSNxk6x6Wmem@dpg-cnr4phv109ks73fet640-a/database_etm_39kh'
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = db_pass
