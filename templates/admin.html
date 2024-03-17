@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Counter</title>
+  </head>
+  <body>
+    <h1>Leaderboard</h1>
+    <table border="1">
+      <tr>
+        <th>ID</th>
+        <th>Rank</th>
+        <th>Team Name</th>
+        <th>Leader ID</th>
+      </tr>
+      {% for entry in entries %}
+      <tr>
+        <td>{{ entry.unique_id }}</td>
+        <td>{{ entry.count }}</td>
+        <td>{{ entry.team_name }}</td>
+        <td>{{ entry.leader_id }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <form action="/delete_all_data" method="GET">
+      <button type="submit">Delete</button>
+    </form>
+    <form action="/view_counter" method="GET">
+      <button type="submit">View Leaderboard</button>
+    </form>
+  </body>
+</html>

@@ -84,6 +84,10 @@ def view_counter():
     entries = Counter.query.all()
     return render_template('counter.html', entries=entries)
 
+@app.route('/admin_ieee', methods=['GET'])
+def admin():
+    return render_template("admin.html", entries=Counter.query.all())
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
