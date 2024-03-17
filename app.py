@@ -5,7 +5,7 @@ import random, os
 
 # load_dotenv()
 
-db_pass = 'postgresql://database_etm_39kh_user:vfykAghBGlAtv2hgAuchLSNxk6x6Wmem@dpg-cnr4phv109ks73fet640-a.oregon-postgres.render.com/database_etm_39kh'
+db_pass = 'postgresql://database_etm_39kh_user:vfykAghBGlAtv2hgAuchLSNxk6x6Wmem@dpg-cnr4phv109ks73fet640-a/database_etm_39kh'
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = db_pass
