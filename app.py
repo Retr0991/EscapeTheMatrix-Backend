@@ -17,7 +17,7 @@ class Counter(db.Model):
 with app.app_context():
     db.create_all()
 
-@app.route('/delete_all_data', methods=['DELETE'])
+@app.route('/delete_all_data', methods=['GET'])
 def delete_all_data():
     try:
         # Delete all records from the Counter table
