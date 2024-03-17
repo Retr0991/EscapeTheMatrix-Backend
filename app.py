@@ -55,7 +55,7 @@ def create_new():
     leader_id = request.form["leaderID"]
     unique_id = "ieee_"+str(random.randint(0, 999))
     response = make_response("Cookie set!")
-    response.set_cookie('unique_id', unique_id)
+    response.set_cookie('unique_id', unique_id, max_age=3600)
     entry = Counter.query.filter_by(unique_id=unique_id).first()
     if entry is None:
         new_entry = Counter(leader_id=leader_id, team_name=team_name, unique_id=unique_id, count = 0)
