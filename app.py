@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import random, os
 from flask import Flask, request, make_response
+from http import cookies
 # from dotenv import load_dotenv
 
 # load_dotenv()
@@ -27,7 +28,7 @@ with app.app_context():
 
 @app.route('/get_cookie', methods=['GET'])
 def get_cookie():
-    username = request.cookies.get('unique_id')
+    username = cookies.SimpleCookie("unique_id")
     return f"UID: {username}"
 
 @app.route('/delete_all_data', methods=['GET'])
@@ -54,8 +55,10 @@ def create_new():
     team_name = request.form["teamName"]
     leader_id = request.form["leaderID"]
     unique_id = "ieee_"+str(random.randint(0, 999))
-    response = make_response("Cookie set!")
-    response.set_cookie('unique_id', unique_id, max_age=3600)
+    cookie = cookies.SimpleCookie()
+    cookie['unique_id'] = unique_id
+    cookie['unique_id']['path'] = '/'  # Set the path to '/' so it's accessible across the entire domain
+    cookie['unique_id']['max-age'] = 3600 * 3
     entry = Counter.query.filter_by(unique_id=unique_id).first()
     if entry is None:
         new_entry = Counter(leader_id=leader_id, team_name=team_name, unique_id=unique_id, count = 0)
